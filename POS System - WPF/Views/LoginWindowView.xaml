@@ -1,0 +1,59 @@
+﻿<Window x:Class="POS_System___WPF.Views.LoginWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:POS_System___WPF.Views"
+        mc:Ignorable="d"
+        Title="Login" 
+        ResizeMode="NoResize" Height="250" Width="400"
+        WindowStartupLocation="CenterScreen"
+        FontSize="20" FontWeight="Bold">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="90"/>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0" Margin="20,0,20,0" LastChildFill="True">
+            <TextBlock Text="Username:" 
+               Margin="0,0,5,0" 
+               VerticalAlignment="Center"
+               Foreground="#2e5f2a"/>
+
+            <TextBox x:Name="UsernameTextBox" 
+             FontWeight ="Normal"
+             Margin="5,0,0,0" 
+             Text="{Binding Username}" 
+             VerticalAlignment="Center"/>
+        </DockPanel>
+
+        <DockPanel Grid.Row="1" Margin="20,0,20,0" LastChildFill="True">
+            <TextBlock Text="Password:" 
+               Margin="0,0,5,0" 
+               VerticalAlignment="Center"
+               Foreground="#2e5f2a"/>
+
+            <PasswordBox x:Name="PasswordTextBox" 
+             FontWeight ="Normal"
+             Margin="5,0,0,0" 
+             VerticalAlignment="Center" PasswordChanged="PasswordTextBox_PasswordChanged"/>
+        </DockPanel>
+
+        <Button Grid.Row="2" 
+         Content="Login" 
+         Margin="20"
+         HorizontalAlignment="Stretch" 
+         VerticalAlignment="Stretch"
+         Command="{Binding LoginCommand}"
+         Style="{StaticResource ButtonRound}">
+            <Button.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#043915" Offset="0.0"/>
+                    <GradientStop Color="#B0CE88" Offset="1.25"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+    </Grid>
+</Window>
