@@ -24,7 +24,11 @@ namespace POS_System___WPF.Services
         public async Task<bool> Login(string username, string password)
         {
             List<User> users = await _userRepository.GetAllUsers();
-            return users.Any(u => u.Username == username && u.Password == password);
+
+            return users.Any(u =>
+                string.Equals(u.Username, username, StringComparison.OrdinalIgnoreCase) // has the same username --(not case sensitive)--
+                && u.Password == password // has the same password --(Case Sensitive)--
+                );
         }
     }
 }

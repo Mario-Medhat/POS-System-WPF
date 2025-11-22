@@ -39,5 +39,27 @@ namespace POS_System___WPF.Views
             if (DataContext is LoginViewModel vm)
                 vm.Password = ((PasswordBox)sender).Password;
         }
+
+        private void PasswordTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            LoginUsingEnterKey(e);
+        }
+
+        private void UsernameTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            LoginUsingEnterKey(e);
+        }
+
+        private void LoginUsingEnterKey(KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (DataContext is LoginViewModel vm)
+                {
+                    if (vm.LoginCommand.CanExecute(null))
+                        vm.LoginCommand.Execute(null);
+                }
+            }
+        }
     }
 }

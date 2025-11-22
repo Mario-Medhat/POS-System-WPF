@@ -26,7 +26,7 @@
              FontWeight ="Normal"
              Margin="5,0,0,0" 
              Text="{Binding Username}" 
-             VerticalAlignment="Center"/>
+             VerticalAlignment="Center" KeyDown="UsernameTextBox_KeyDown"/>
         </DockPanel>
 
         <DockPanel Grid.Row="1" Margin="20,0,20,0" LastChildFill="True">
@@ -38,7 +38,7 @@
             <PasswordBox x:Name="PasswordTextBox" 
              FontWeight ="Normal"
              Margin="5,0,0,0" 
-             VerticalAlignment="Center" PasswordChanged="PasswordTextBox_PasswordChanged"/>
+             VerticalAlignment="Center" PasswordChanged="PasswordTextBox_PasswordChanged" KeyDown="PasswordTextBox_KeyDown"/>
         </DockPanel>
 
         <Button Grid.Row="2" 

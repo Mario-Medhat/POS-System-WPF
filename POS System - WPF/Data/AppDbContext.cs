@@ -41,7 +41,7 @@ namespace POS_System___WPF.Data
             {
                 // Local SQL Server configuration
                 optionsBuilder.UseSqlServer(
-                    @"Data Source=LAPTOP-PH3ROT2P;
+                    @"Data Source=it-esaleh\sqlexpress;
                       Initial Catalog=POSDB;
                       Integrated Security=True;
                       Encrypt=True;
