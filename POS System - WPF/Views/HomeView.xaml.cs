@@ -28,4 +28,3 @@ namespace POS_System___WPF.Views
         }
     }
 }
-// TODO: Develop the HomeView (sidebar). 

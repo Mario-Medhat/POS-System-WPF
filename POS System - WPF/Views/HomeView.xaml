@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
         <UniformGrid Grid.Row="0" Margin="10 0" Rows="1"
                      VerticalAlignment="Center" HorizontalAlignment="Stretch"  >
-            <Button Content="Sales" FontSize="16" Margin="10" Padding="10" Height="35"
+            <Button Content="Sales" FontSize="16" Margin="10" Padding="10" Height="45"
              Command="{Binding ShowSalesViewCommand}"
              Style="{StaticResource ButtonRound}">
                 <Button.Background>
@@ -57,6 +57,7 @@
         </UniformGrid>
         
         <ContentControl Grid.Row="1" Content="{Binding ActiveView}"/>
-        <Image Grid.Row="2" Source="/Images/Logo.png" Stretch="Fill" Height="100"/>
+        <Image Grid.Row="2" Source="/Images/Logo.png" Stretch="Uniform" Height="100"/>
+        <!--TODO: Show the Logo-->
     </Grid>
 </UserControl>
