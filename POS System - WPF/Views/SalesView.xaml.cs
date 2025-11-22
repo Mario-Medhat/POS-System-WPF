@@ -22,6 +22,7 @@ namespace POS_System___WPF.Views
     /// </summary>
     public partial class SalesView : UserControl
     {
+        private bool _wasLoadedBefor = false;
         public SalesView()
         {
             InitializeComponent();
@@ -30,37 +31,43 @@ namespace POS_System___WPF.Views
             Loaded += SalesView_Loaded;
         }
 
-        
+
         /// <summary>
         /// Runs once when the view finishes loading.
         /// Creates and initializes the ViewModel asynchronously.
         /// </summary>
         private async void SalesView_Loaded(object sender, RoutedEventArgs e)
         {
-            try
+            if (!_wasLoadedBefor)
             {
-                // Create the repository (this should ideally be done using DI Container)
-                var appDbContext = new Data.AppDbContext();
-                var productRepository = new ProductRepository(appDbContext);
+                try
+                {
+                    // Create the repository (this should ideally be done using DI Container)
+                    var appDbContext = new Data.AppDbContext();
+                    var productRepository = new ProductRepository(appDbContext);
 
-                // Pass repository into the ViewModel
-                var viewModel = new SalesViewModel(productRepository);
+                    // Pass repository into the ViewModel
+                    var viewModel = new SalesViewModel(productRepository);
 
-                // Load necessary data (products)
-                await viewModel.InitializeAsync();
+                    // Load necessary data (products)
+                    await viewModel.InitializeAsync();
 
-                // Bind UI to ViewModel
-                DataContext = viewModel;
-            }
-            catch (Exception ex)
-            {
-                // Fail-safe UI message if something goes wrong
-                MessageBox.Show(
-                    $"Failed to load application data.\n\nError: {ex.Message}",
-                    "Initialization Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
+                    // Bind UI to ViewModel
+                    DataContext = viewModel;
+
+                    // Mark as loaded to prevent re-initialization
+                    _wasLoadedBefor = true;
+                }
+                catch (Exception ex)
+                {
+                    // Fail-safe UI message if something goes wrong
+                    MessageBox.Show(
+                        $"Failed to load application data.\n\nError: {ex.Message}",
+                        "Initialization Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
+                }
             }
         }
     }

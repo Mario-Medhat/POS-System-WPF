@@ -20,7 +20,7 @@ namespace POS_System___WPF
         public MainWindow()
         {
             InitializeComponent();
-            MainContentControl.Content = new SalesView();
+            MainContentControl.Content = new HomeView();
         }
     }
 }
