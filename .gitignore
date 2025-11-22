@@ -426,3 +426,8 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+/.vs/POS System - WPF/DesignTimeBuild
+/.vs/POS System - WPF/FileContentIndex
+/.vs
+/POS System - WPF/obj
+/POS System - WPF/bin
