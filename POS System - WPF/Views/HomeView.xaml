@@ -57,7 +57,7 @@
         </UniformGrid>
         
         <ContentControl Grid.Row="1" Content="{Binding ActiveView}"/>
-        <Image Grid.Row="2" Source="/Images/Logo.png" Stretch="Uniform" Height="100"/>
+        <Image Grid.Row="2" Source="/Images/Logo.png" Stretch="Uniform" Height="120"/>
         <!--TODO: Show the Logo-->
     </Grid>
 </UserControl>

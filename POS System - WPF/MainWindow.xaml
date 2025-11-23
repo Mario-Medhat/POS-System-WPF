@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:POS_System___WPF"
         mc:Ignorable="d"
         Title="MainWindow"
-        Height="450" Width="800">
+        WindowStartupLocation="CenterScreen"
+        Height="800" Width="1200">
     <Grid>
         <ContentControl x:Name="MainContentControl"/>
     </Grid>
