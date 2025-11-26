@@ -56,6 +56,7 @@ namespace POS_System___WPF.Data
         {
             ConfigureInventoryLog(modelBuilder);
             ConfigureProducts(modelBuilder);
+            ConfigureProductCategory(modelBuilder);
             ConfigureSaleItems(modelBuilder);
             ConfigurePayments(modelBuilder);
             ConfigureRelationships(modelBuilder);
@@ -72,6 +73,13 @@ namespace POS_System___WPF.Data
             // Primary key
             modelBuilder.Entity<InventoryLog>()
                 .HasKey(l => l.LogID);
+        }
+
+        private static void ConfigureProductCategory(ModelBuilder modelBuilder)
+        {
+            // Primary key
+            modelBuilder.Entity<ProductCategory>()
+                .HasKey(l => l.CategoryId);
         }
 
         private static void ConfigureProducts(ModelBuilder modelBuilder)
