@@ -11,6 +11,7 @@ namespace POS_System___WPF.Data
     {
         // DbSets represent database tables
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<SaleItem> Sales { get; set; }
         public DbSet<Customer> Customers { get; set; }
