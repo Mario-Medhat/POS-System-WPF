@@ -1,5 +1,5 @@
-﻿using POS_System___WPF.Models;
-using POS_System___WPF.Repositories.Interfaces;
+﻿using POS_System___WPF.Interfaces;
+using POS_System___WPF.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace POS_System___WPF.Repositories.Interfaces
+namespace POS_System___WPF.Interfaces
 {
     public interface IRepository<T> where T : class
     {

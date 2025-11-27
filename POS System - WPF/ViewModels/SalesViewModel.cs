@@ -1,6 +1,6 @@
 ﻿using POS_System___WPF.Commands;
+using POS_System___WPF.Interfaces;
 using POS_System___WPF.Models;
-using POS_System___WPF.Repositories.Interfaces;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;

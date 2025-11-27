@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace POS_System___WPF.Repositories.Interfaces
+namespace POS_System___WPF.Interfaces
 {
-    public interface ICustomerRepository : IRepository<Customer>
+    public interface ISupplierRepository : IRepository<Supplier>
     {
-        Task<List<Customer>> GetAllCustomers();
+        Task<List<Supplier>> GetAllSuppliers(int threshold);
     }
 }

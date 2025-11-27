@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using POS_System___WPF.Data;
+using POS_System___WPF.Interfaces;
 using POS_System___WPF.Models;
-using POS_System___WPF.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
