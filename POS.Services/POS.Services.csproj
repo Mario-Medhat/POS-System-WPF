@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\POS.Data\POS.Data.csproj" />
     <ProjectReference Include="..\POS.Domain\POS.Domain.csproj" />
   </ItemGroup>
