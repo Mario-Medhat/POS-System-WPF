@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using POS_System___WPF.Models;
+using System.IO;
 
 namespace POS_System___WPF.Data
 {
@@ -31,24 +33,39 @@ namespace POS_System___WPF.Data
             : base(options)
         {
         }
-
         /// <summary>
         /// Configures the database provider.
         /// This runs ONLY when no external configuration (DI) is provided.
         /// </summary>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
+            if (optionsBuilder.IsConfigured)
+                return;
+
+            // Get root project directory (walk up until appsettings.json is found)
+            string baseDir = AppContext.BaseDirectory;
+            string current = baseDir;
+
+            while (!File.Exists(Path.Combine(current, "appsettings.json")))
             {
-                // Local SQL Server configuration
-                optionsBuilder.UseSqlServer(
-                    @"Data Source=it-esaleh\sqlexpress;
-                      Initial Catalog=POSDB;
-                      Integrated Security=True;
-                      Encrypt=True;
-                      Trust Server Certificate=True");
+                var parent = Directory.GetParent(current);
+                if (parent == null)
+                    break;
+
+                current = parent.FullName;
             }
+
+            // Build configuration
+            var config = new ConfigurationBuilder()
+                .SetBasePath(current)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+
+            string connectionString = config.GetConnectionString("POSDB");
+
+            optionsBuilder.UseSqlServer(connectionString);
         }
+
 
         /// <summary>
         /// Configures entity rules, precision settings, and relationships.
