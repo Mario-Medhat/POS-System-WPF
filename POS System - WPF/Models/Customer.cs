@@ -14,7 +14,7 @@ namespace POS_System___WPF.Models
         public string? Phone { get; private set; }
         public string? Email { get; private set; }
 
-        public List<Invoice> Invoices { get; private set; } = new();
+        public List<SaleInvoice> SaleInvoices { get; private set; } = new();
 
 
         private Customer() { }

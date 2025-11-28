@@ -9,13 +9,11 @@ using System.Threading.Tasks;
 
 namespace POS_System___WPF.Models
 {
-    public class Invoice
+    public abstract class Invoice
     {
         public int InvoiceId { get; private set; }
         public DateTime InvoiceDate { get; private set; } = DateTime.Now;
 
-        public int? CustomerId { get; private set; }
-        public Customer Customer { get; private set; }
 
         [NotMapped]
         public decimal TotalAmount => InvoiceItems?.Sum(i => i.TotalAmount) ?? 0;
@@ -47,14 +45,9 @@ namespace POS_System___WPF.Models
             }
         } // Paid, has remaining, Waiting for Payment
 
-        private Invoice() { }
-
-        public Invoice(Customer customer = null)
-        {
-            Customer = customer;
-            CustomerId = customer?.CustomerId;
-        }
-
+        // protected Constructor to make nobody can make a direct instance from this class
+        // But we cane inherit from it
+        protected Invoice() { }
 
 
         // ================================

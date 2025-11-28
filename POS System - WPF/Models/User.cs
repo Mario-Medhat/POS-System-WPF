@@ -18,7 +18,12 @@ namespace POS_System___WPF.Models
         public string Phone { get; set; }
         public string Email { get; set; }
 
-        public string Role { get; set; }
+        public int RoleId { get; set; }
+        public Role Role { get; set; }
+
+        public List<Expense> Expenses { get; set; } = new();
+        public List<NotificationsLog> Notifications { get; set; } = new();
+        public List<StockMovement> StockMovements { get; set; } = new();
     }
 
 }

@@ -26,7 +26,8 @@ namespace POS_System___WPF.Models
 
         public List<InvoiceItem> InvoiceItems { get; private set; }
         public List<InventoryLog> InventoryLogs { get; private set; }
-
+        public List<PriceLevel> PriceLevels { get; set; } = new();
+        public List<StockMovement> StockMovements { get; set; } = new();
         private Product() { }
 
         public Product(string name, decimal price, decimal stock = 0)
@@ -34,6 +35,14 @@ namespace POS_System___WPF.Models
             SetName(name);
             SetPrice(price);
             SetStock(stock);
+        }
+
+        private void SetStock(decimal stock)
+        {
+            if (stock < 0)
+                throw new ArgumentException("Stock quantity cannot be negative");
+
+            Stock = stock;
         }
 
         public void SetName(string name)
@@ -60,7 +69,7 @@ namespace POS_System___WPF.Models
             }
             Stock += qty;
 
-            InventoryLogs.Add(new InventoryLog(Id, qty, "Stock Increase"));
+            InventoryLogs.Add(new InventoryLog(product: this, qty: qty, changeType: Enums.StockChangeType.Purchase));
         }
 
         public void DecreaseStock(decimal qty)
@@ -70,7 +79,7 @@ namespace POS_System___WPF.Models
                 throw new InvalidOperationException("Not enough stock");
 
             Stock -= qty;
-            InventoryLogs.Add(new InventoryLog(Id, -qty, "Stock Decrease"));
+            InventoryLogs.Add(new InventoryLog(product: this, qty: -qty, Enums.StockChangeType.SaleItem));
         }
 
         internal void AssignCategory(ProductCategory category)

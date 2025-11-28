@@ -9,14 +9,15 @@ namespace POS_System___WPF.Models
 {
     public class Supplier
     {
-        public int SupplierID { get; set; }
+        public int SupplierId { get; set; }
         public string SupplierName { get; set; }
 
         public string? ContactFullName { get; set; }
         public string? Phone { get; set; }
         public string? Email { get; set; }
 
-        public List<Product> Products { get; set; } = new();
+        public List<Product> Products { get; private set; } = new();
+        public List<PurchaseInvoice> PurchaseInvoices { get; private set; } = new();
 
         private Supplier() { }
 

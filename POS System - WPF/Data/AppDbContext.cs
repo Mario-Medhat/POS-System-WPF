@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using POS_System___WPF.Data.EntityConfigrations;
 using POS_System___WPF.Models;
 
 namespace POS_System___WPF.Data
@@ -16,7 +17,8 @@ namespace POS_System___WPF.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
 
-        public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<SaleInvoice> SaleInvoices { get; set; }
+        public DbSet<PurchaseInvoice> PurchaseInvoices { get; set; }
         public DbSet<InvoiceItem> InvoiceItems { get; set; }
 
         public DbSet<Payment> Payments { get; set; }
@@ -31,71 +33,24 @@ namespace POS_System___WPF.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // USER
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Username)
-                .IsUnique();
+            modelBuilder.ApplyConfiguration(new ExpenseConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new CustomerConfiguration());
+            modelBuilder.ApplyConfiguration(new SupplierConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new InvoiceConfiguration());
+            modelBuilder.ApplyConfiguration(new SaleInvoicefiguration());
+            modelBuilder.ApplyConfiguration(new PurchaseInvoiceInvoiceConfiguration());
+            modelBuilder.ApplyConfiguration(new InvoiceItemConfiguration());
+            modelBuilder.ApplyConfiguration(new PaymentConfiguration());
+            modelBuilder.ApplyConfiguration(new InventoryLogConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            modelBuilder.ApplyConfiguration(new RolePermissionConfiguration());
+            modelBuilder.ApplyConfiguration(new NotificationsLogConfiguration());
+            modelBuilder.ApplyConfiguration(new PriceLevelConfiguration());
+            modelBuilder.ApplyConfiguration(new StockMovementConfiguration());
 
-            // CUSTOMER
-            modelBuilder.Entity<Customer>()
-                .HasMany(c => c.Invoices)
-                .WithOne(i => i.Customer)
-                .HasForeignKey(i => i.CustomerId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // SUPPLIER
-            modelBuilder.Entity<Supplier>()
-                .HasMany(s => s.Products)
-                .WithOne(p => p.Supplier)
-                .HasForeignKey(p => p.SupplierId)
-                .OnDelete(DeleteBehavior.SetNull);
-
-            // CATEGORY
-            modelBuilder.Entity<ProductCategory>()
-                .HasMany(c => c.Products)
-                .WithOne(p => p.Category)
-                .HasForeignKey(p => p.CategoryId)
-                .OnDelete(DeleteBehavior.SetNull);
-
-            // PRODUCT
-            modelBuilder.Entity<Product>()
-                .HasMany(p => p.InvoiceItems)
-                .WithOne(ii => ii.Product)
-                .HasForeignKey(ii => ii.ProductId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Product>()
-                .HasMany(p => p.InventoryLogs)
-                .WithOne(l => l.Product)
-                .HasForeignKey(l => l.ProductId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // INVOICE
-            modelBuilder.Entity<Invoice>()
-                .HasMany(i => i.InvoiceItems)
-                .WithOne(ii => ii.Invoice)
-                .HasForeignKey(ii => ii.InvoiceId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Invoice>()
-                .HasMany(i => i.Payments)
-                .WithOne(p => p.Invoice)
-                .HasForeignKey(p => p.InvoiceId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // INVOICE ITEM
-            modelBuilder.Entity<InvoiceItem>()
-                .HasKey(ii => ii.InvoiceId);
-
-            // PAYMENT
-            modelBuilder.Entity<Payment>()
-                .Property(p => p.Amount)
-                .HasColumnType("decimal(18,2)");
-
-            // INVENTORY LOG
-            modelBuilder.Entity<InventoryLog>()
-                .Property(l => l.StockChanged)
-                .HasColumnType("decimal(18,2)");
         }
     }
 }

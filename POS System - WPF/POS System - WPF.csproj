@@ -39,6 +39,7 @@
   <ItemGroup>
     <Folder Include="Converters\" />
     <Folder Include="Extensions\" />
+    <Folder Include="POS_System___WPF\Data\EntityConfigrations\" />
   </ItemGroup>
 
 </Project>
