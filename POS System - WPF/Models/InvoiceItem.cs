@@ -26,9 +26,10 @@ namespace POS_System___WPF.Models
         
         private InvoiceItem() { }
 
-        public InvoiceItem(int invoiceId, int productId, decimal price, decimal qty)
+        public InvoiceItem(Invoice invoice, int productId, decimal price, decimal qty)
         {
-            InvoiceId = invoiceId;
+            Invoice = invoice;
+            InvoiceId = invoice.InvoiceId;
             ProductId = productId;
             PriceAtSaleTime = price;
             Quantity = qty;

@@ -1,4 +1,5 @@
-﻿using POS_System___WPF.Models;
+﻿using POS_System___WPF.Data;
+using POS_System___WPF.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,21 +9,6 @@ using System.Threading.Tasks;
 
 namespace POS_System___WPF.Models
 {
-    public enum PaymentStatus
-    {
-        WaitingForPayment,
-        HasRemaining,
-        Paid,
-    }
-    public enum InvoiceStatus
-    {
-        Active,
-        Cancelled,
-        Returned,
-        Draft,
-    }
-
-
     public class Invoice
     {
         public int InvoiceId { get; private set; }
@@ -41,23 +27,23 @@ namespace POS_System___WPF.Models
         public List<InvoiceItem> InvoiceItems { get; private set; } = new();
         public List<Payment> Payments { get; private set; } = new(); // the customer can pay on multible times
 
-        public InvoiceStatus InvoiceStatus { get; private set; } = InvoiceStatus.Active;
+        public Enums.InvoiceStatus InvoiceStatus { get; private set; } = Enums.InvoiceStatus.Active;
 
         [NotMapped]
-        public PaymentStatus PaymentStatus
+        public Enums.PaymentStatus PaymentStatus
         {
             get
             {
                 if (TotalAmount == 0)
-                    return PaymentStatus.WaitingForPayment;
+                    return Enums.PaymentStatus.WaitingForPayment;
 
                 if (PaidAmount == 0)
-                    return PaymentStatus.WaitingForPayment;
+                    return Enums.PaymentStatus.WaitingForPayment;
 
                 if (PaidAmount < TotalAmount)
-                    return PaymentStatus.HasRemaining;
+                    return Enums.PaymentStatus.HasRemaining;
 
-                return PaymentStatus.Paid;
+                return Enums.PaymentStatus.Paid;
             }
         } // Paid, has remaining, Waiting for Payment
 
@@ -80,7 +66,7 @@ namespace POS_System___WPF.Models
         /// </summary>
         public void AddItem(Product product, int quantity, decimal priceAtSale)
         {
-            if (InvoiceStatus != InvoiceStatus.Active)
+            if (InvoiceStatus != Enums.InvoiceStatus.Active)
                 throw new InvalidOperationException("Cannot modify items on a non-active invoice.");
 
             if (product == null)
@@ -93,14 +79,7 @@ namespace POS_System___WPF.Models
 
             if (existingItem == null)
             {
-                InvoiceItems.Add(new InvoiceItem
-                {
-                    Product = product,
-                    ProductId = product.ProductId,
-                    Quantity = quantity,
-                    PriceAtSaleTime = priceAtSale,
-                    Invoice = this
-                });
+                InvoiceItems.Add(new InvoiceItem(invoice: this, productId: product.ProductId, price: priceAtSale, quantity));
             }
             else
             {
@@ -111,21 +90,15 @@ namespace POS_System___WPF.Models
         /// <summary>
         /// Register a payment for this invoice.
         /// </summary>
-        public void AddPayment(decimal amount)
+        public void AddPayment(decimal amount, Enums.PaymentMethod paymentMethod)
         {
-            if (InvoiceStatus != InvoiceStatus.Active)
+            if (InvoiceStatus != Enums.InvoiceStatus.Active)
                 throw new InvalidOperationException("Cannot pay a non-active invoice.");
 
             if (amount <= 0)
                 throw new ArgumentException("Payment amount must be greater than zero.");
 
-            Payments.Add(new Payment
-            {
-                Amount = amount,
-                Date = DateTime.Now,
-                InvoiceId = this.InvoiceId,
-                Invoice = this
-            });
+            Payments.Add(new Payment(invoice: this, amount: amount, paymentMethod: paymentMethod));
         }
 
         /// <summary>
@@ -133,10 +106,10 @@ namespace POS_System___WPF.Models
         /// </summary>
         public void Cancel()
         {
-            if (InvoiceStatus == InvoiceStatus.Cancelled)
+            if (InvoiceStatus == Enums.InvoiceStatus.Cancelled)
                 return;
 
-            InvoiceStatus = InvoiceStatus.Cancelled;
+            InvoiceStatus = Enums.InvoiceStatus.Cancelled;
             InvoiceItems.Clear();
             Payments.Clear();
         }
@@ -146,10 +119,10 @@ namespace POS_System___WPF.Models
         /// </summary>
         public void Return()
         {
-            if (InvoiceStatus != InvoiceStatus.Active)
+            if (InvoiceStatus != Enums.InvoiceStatus.Active)
                 throw new InvalidOperationException("Only active invoices can be returned.");
 
-            InvoiceStatus = InvoiceStatus.Returned;
+            InvoiceStatus = Enums.InvoiceStatus.Returned;
         }
 
         /// <summary>
@@ -168,7 +141,7 @@ namespace POS_System___WPF.Models
         /// </summary>
         public void SetDraft()
         {
-            InvoiceStatus = InvoiceStatus.Draft;
+            InvoiceStatus = Enums.InvoiceStatus.Draft;
         }
     }
 }
