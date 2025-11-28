@@ -12,10 +12,10 @@ namespace POS_System___WPF.Models
     {
         public int LogID { get; set; }
 
-        public int ProductID { get; set; }
+        public int ProductId { get; set; }
         public Product Product { get; set; }
 
-        public int Change { get; set; } // +5, -3 ..etc
+        public int QuantityChanged { get; set; } // +5, -3 ..etc
 
         public string ChangeType { get; set; } // SaleItem, Purchase, Manual
 

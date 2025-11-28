@@ -1,161 +1,105 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using POS_System___WPF.Models;
-using System.IO;
 
 namespace POS_System___WPF.Data
 {
-    /// <summary>
-    /// Application database context.
-    /// Handles database models, configuration, and entity relationships.
-    /// </summary>
     public class AppDbContext : DbContext
     {
-        // DbSets represent database tables
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        {
+        }
+
+        // ==========================
+        // DbSets
+        // ==========================
+
+        public DbSet<User> Users { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Supplier> Suppliers { get; set; }
+
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
-        public DbSet<Supplier> Suppliers { get; set; }
-        public DbSet<SaleItem> Sales { get; set; }
-        public DbSet<Customer> Customers { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<InventoryLog> InventoryLogs { get; set; }
+
+        public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<InvoiceItem> InvoiceItems { get; set; }
+
         public DbSet<Payment> Payments { get; set; }
 
-        /// <summary>
-        /// Default constructor used when dependency injection is not configured.
-        /// </summary>
-        public AppDbContext() { }
+        public DbSet<InventoryLog> InventoryLogs { get; set; }
 
-        /// <summary>
-        /// Constructor used when dependency injection provides DbContextOptions.
-        /// </summary>
-        public AppDbContext(DbContextOptions<AppDbContext> options)
-            : base(options)
-        {
-        }
-        /// <summary>
-        /// Configures the database provider.
-        /// This runs ONLY when no external configuration (DI) is provided.
-        /// </summary>
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (optionsBuilder.IsConfigured)
-                return;
+        // ==========================
+        // Configuration
+        // ==========================
 
-            // Get root project directory (walk up until appsettings.json is found)
-            string baseDir = AppContext.BaseDirectory;
-            string current = baseDir;
-
-            while (!File.Exists(Path.Combine(current, "appsettings.json")))
-            {
-                var parent = Directory.GetParent(current);
-                if (parent == null)
-                    break;
-
-                current = parent.FullName;
-            }
-
-            // Build configuration
-            var config = new ConfigurationBuilder()
-                .SetBasePath(current)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
-
-            string connectionString = config.GetConnectionString("POSDB");
-
-            optionsBuilder.UseSqlServer(connectionString);
-        }
-
-
-        /// <summary>
-        /// Configures entity rules, precision settings, and relationships.
-        /// </summary>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            ConfigureInventoryLog(modelBuilder);
-            ConfigureProducts(modelBuilder);
-            ConfigureProductCategory(modelBuilder);
-            ConfigureSaleItems(modelBuilder);
-            ConfigurePayments(modelBuilder);
-            ConfigureRelationships(modelBuilder);
-
             base.OnModelCreating(modelBuilder);
-        }
 
-        // ------------------------------
-        // Entity Configurations
-        // ------------------------------
+            // USER
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
 
-        private static void ConfigureInventoryLog(ModelBuilder modelBuilder)
-        {
-            // Primary key
-            modelBuilder.Entity<InventoryLog>()
-                .HasKey(l => l.LogID);
-        }
+            // CUSTOMER
+            modelBuilder.Entity<Customer>()
+                .HasMany(c => c.Invoices)
+                .WithOne(i => i.Customer)
+                .HasForeignKey(i => i.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-        private static void ConfigureProductCategory(ModelBuilder modelBuilder)
-        {
-            // Primary key
+            // SUPPLIER
+            modelBuilder.Entity<Supplier>()
+                .HasMany(s => s.Products)
+                .WithOne(p => p.Supplier)
+                .HasForeignKey(p => p.SupplierId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // CATEGORY
             modelBuilder.Entity<ProductCategory>()
-                .HasKey(l => l.CategoryId);
-        }
+                .HasMany(c => c.Products)
+                .WithOne(p => p.Category)
+                .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.SetNull);
 
-        private static void ConfigureProducts(ModelBuilder modelBuilder)
-        {
-            // Product.Price → decimal precision
+            // PRODUCT
             modelBuilder.Entity<Product>()
-                .Property(p => p.Price)
-                .HasColumnType("decimal(18,2)");
-        }
+                .HasMany(p => p.InvoiceItems)
+                .WithOne(ii => ii.Product)
+                .HasForeignKey(ii => ii.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-        private static void ConfigureSaleItems(ModelBuilder modelBuilder)
-        {
-            // **IMPORTANT**
-            // TotalAmount is a calculated property → Not Mapped / ignored.
-            modelBuilder.Entity<SaleItem>()
-                .Property(s => s.TotalAmount)
-                .HasColumnType("decimal(18,2)")
-                .HasComputedColumnSql("[Quantity] * [PriceAtSaleTime]");
+            modelBuilder.Entity<Product>()
+                .HasMany(p => p.InventoryLogs)
+                .WithOne(l => l.Product)
+                .HasForeignKey(l => l.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-        }
+            // INVOICE
+            modelBuilder.Entity<Invoice>()
+                .HasMany(i => i.InvoiceItems)
+                .WithOne(ii => ii.Invoice)
+                .HasForeignKey(ii => ii.InvoiceId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-        private static void ConfigurePayments(ModelBuilder modelBuilder)
-        {
-            // Payment.Amount → decimal precision
-            modelBuilder.Entity<SaleItem>()
-            .Ignore(s => s.TotalAmount);
+            modelBuilder.Entity<Invoice>()
+                .HasMany(i => i.Payments)
+                .WithOne(p => p.Invoice)
+                .HasForeignKey(p => p.InvoiceId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-        }
+            // INVOICE ITEM
+            modelBuilder.Entity<InvoiceItem>()
+                .HasKey(ii => ii.InvoiceId);
 
-        // ------------------------------
-        // Relationships
-        // ------------------------------
-
-        private static void ConfigureRelationships(ModelBuilder modelBuilder)
-        {
-            // SaleItem → Customer (Many-to-One)
-            modelBuilder.Entity<SaleItem>()
-                .HasOne(s => s.Customer)
-                .WithMany(c => c.Sales)
-                .HasForeignKey(s => s.CustomerID);
-
-            // SaleItem → Product (Many-to-One)
-            modelBuilder.Entity<SaleItem>()
-                .HasOne(s => s.Product)
-                .WithMany(p => p.Sales)
-                .HasForeignKey(s => s.ProductID);
-
-            // Payment → SaleItem (Many-to-One)
+            // PAYMENT
             modelBuilder.Entity<Payment>()
-                .HasOne(p => p.SaleItem)
-                .WithMany(s => s.Payments)
-                .HasForeignKey(p => p.SaleID);
+                .Property(p => p.Amount)
+                .HasColumnType("decimal(18,2)");
 
-            // InventoryLog → Product (Many-to-One)
+            // INVENTORY LOG
             modelBuilder.Entity<InventoryLog>()
-                .HasOne(l => l.Product)
-                .WithMany(p => p.InventoryLogs)
-                .HasForeignKey(l => l.ProductID);
+                .Property(l => l.QuantityChanged)
+                .HasColumnType("decimal(18,2)");
         }
     }
 }
