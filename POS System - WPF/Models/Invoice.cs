@@ -25,27 +25,23 @@ namespace POS_System___WPF.Models
 
     public class Invoice
     {
-        public int InvoiceId { get; set; }
+        public int InvoiceId { get; private set; }
+        public DateTime InvoiceDate { get; private set; } = DateTime.Now;
 
-        public DateTime InvoiceDate { get; set; } = DateTime.Now;
-
-        public int CustomerId { get; set; }
-        public Customer Customer { get; set; }
+        public int? CustomerId { get; private set; }
+        public Customer Customer { get; private set; }
 
         [NotMapped]
         public decimal TotalAmount => InvoiceItems?.Sum(i => i.TotalAmount) ?? 0;
-
         [NotMapped]
         public decimal PaidAmount => Payments?.Sum(p => p.Amount) ?? 0;
-
         [NotMapped]
         public decimal RemainingAmount => TotalAmount - PaidAmount;
 
-        public List<InvoiceItem> InvoiceItems { get; set; } = new();
+        public List<InvoiceItem> InvoiceItems { get; private set; } = new();
+        public List<Payment> Payments { get; private set; } = new(); // the customer can pay on multible times
 
-        public List<Payment> Payments { get; set; } = new(); // the customer can pay on multible times
-
-        public InvoiceStatus InvoiceStatus { get; set; } = InvoiceStatus.Active;
+        public InvoiceStatus InvoiceStatus { get; private set; } = InvoiceStatus.Active;
 
         [NotMapped]
         public PaymentStatus PaymentStatus
@@ -64,6 +60,15 @@ namespace POS_System___WPF.Models
                 return PaymentStatus.Paid;
             }
         } // Paid, has remaining, Waiting for Payment
+
+        private Invoice() { }
+
+        public Invoice(Customer customer = null)
+        {
+            Customer = customer;
+            CustomerId = customer?.CustomerID;
+        }
+
 
 
         // ================================
@@ -106,7 +111,7 @@ namespace POS_System___WPF.Models
         /// <summary>
         /// Register a payment for this invoice.
         /// </summary>
-        public void Pay(decimal amount)
+        public void AddPayment(decimal amount)
         {
             if (InvoiceStatus != InvoiceStatus.Active)
                 throw new InvalidOperationException("Cannot pay a non-active invoice.");

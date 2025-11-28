@@ -47,7 +47,7 @@ namespace POS_System___WPF.Services
         {
             var invoice = await _db.Invoices.FindAsync(invoiceId);
 
-            invoice.Pay(amount);
+            invoice.AddPayment(amount);
 
             await _db.SaveChangesAsync();
         }

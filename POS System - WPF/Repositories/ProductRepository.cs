@@ -22,7 +22,7 @@ namespace POS_System___WPF.Repositories
         public async Task<List<Product>> GetLowStockProducts(int threshold)
         {
             return await _context.Products
-                .Where(p => p.Quantity <= threshold)
+                .Where(p => p.Stock <= threshold)
                 .ToListAsync();
         }
     }

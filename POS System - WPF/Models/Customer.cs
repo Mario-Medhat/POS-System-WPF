@@ -9,15 +9,29 @@ namespace POS_System___WPF.Models
 {
     public class Customer
     {
-        public int CustomerID { get; set; }
+        public int CustomerID { get; private set; }
+        public string Name { get; private set; }
+        public string? Phone { get; private set; }
+        public string? Email { get; private set; }
 
-        public string Name { get; set; }
+        public List<Invoice> Invoices { get; private set; } = new();
 
-        public string Phone { get; set; }
 
-        public string Email { get; set; }
+        private Customer() { }
 
-        public List<Invoice> Invoices { get; set; }
+        public Customer(string name, string? phone = null, string? email = null)
+        {
+            SetName(name);
+            Phone = phone;
+            Email = email;
+        }
+
+        public void SetName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Customer name cannot be empty");
+
+            Name = name;
+        }
     }
-
 }

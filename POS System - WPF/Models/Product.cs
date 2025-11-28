@@ -1,4 +1,5 @@
-﻿using System;
+﻿using POS_System___WPF.Data;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,23 +11,79 @@ namespace POS_System___WPF.Models
 {
     public class Product
     {
-        public int ProductId { get; set; }
+        public int ProductId { get; private set; }
 
-        public string ProductName { get; set; }
+        public string ProductName { get; private set; }
+        public decimal Price { get; private set; }
+        public decimal Stock { get; private set; }
 
-        public int CategoryId { get; set; }
-        public ProductCategory Category { get; set; }
+        public int CategoryId { get; private set; }
+        public ProductCategory Category { get; private set; }
 
-        public decimal Price { get; set; }
+        public int SupplierId { get; private set; }
 
-        public int Quantity { get; set; }
+        public Supplier Supplier { get; private set; }
 
+        public List<InvoiceItem> InvoiceItems { get; private set; }
+        public List<InventoryLog> InventoryLogs { get; private set; }
 
-        public int SupplierId { get; set; }
+        private Product() { }
 
-        public Supplier Supplier { get; set; }
+        public Product(string name, decimal price, decimal stock = 0)
+        {
+            SetName(name);
+            SetPrice(price);
+            SetStock(stock);
+        }
 
-        public List<InvoiceItem> InvoiceItems { get; set; }
-        public List<InventoryLog> InventoryLogs { get; set; }
+        public void SetName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Product name cannot be empty");
+
+            ProductName = name;
+        }
+
+        public void SetPrice(decimal price)
+        {
+            if (price < 0)
+                throw new ArgumentException("Price should be greater than zero");
+
+            Price = price;
+        }
+
+        public void IncreaseStock(decimal qty)
+        {
+            if (qty <= 0)
+            {
+                throw new ArgumentException("Quantity should be greater than zero");
+            }
+            Stock += qty;
+
+            InventoryLogs.Add(new InventoryLog(Id, qty, "Stock Increase"));
+        }
+
+        public void DecreaseStock(decimal qty)
+        {
+            if (qty <= 0) return;
+            if (Stock < qty)
+                throw new InvalidOperationException("Not enough stock");
+
+            Stock -= qty;
+            InventoryLogs.Add(new InventoryLog(Id, -qty, "Stock Decrease"));
+        }
+
+        internal void AssignCategory(ProductCategory category)
+        {
+            Category = category;
+            CategoryId = category.CategoryId;
+        }
+
+        internal void ClearCategory()
+        {
+            Category = null;
+            CategoryId = 0;
+        }
     }
+
 }

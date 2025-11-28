@@ -98,7 +98,7 @@ namespace POS_System___WPF.Data
 
             // INVENTORY LOG
             modelBuilder.Entity<InventoryLog>()
-                .Property(l => l.QuantityChanged)
+                .Property(l => l.StockChanged)
                 .HasColumnType("decimal(18,2)");
         }
     }

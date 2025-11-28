@@ -8,6 +8,13 @@ using System.Threading.Tasks;
 
 namespace POS_System___WPF.Models
 {
+    public enum ChangeType
+    {
+        SaleItem,
+        Purchase,
+        Manual,
+    }
+
     public class InventoryLog
     {
         public int LogID { get; set; }
@@ -15,10 +22,21 @@ namespace POS_System___WPF.Models
         public int ProductId { get; set; }
         public Product Product { get; set; }
 
-        public int QuantityChanged { get; set; } // +5, -3 ..etc
+        public decimal StockChanged { get; set; } // +5, -3 ..etc
 
-        public string ChangeType { get; set; } // SaleItem, Purchase, Manual
+        public ChangeType ChangeType { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime LogDate { get; set; } = DateTime.Now;
+        public string Note { get; private set; }
+
+        private InventoryLog() { }
+        public InventoryLog(Product product, decimal qty, ChangeType changeType, string note = "")
+        {
+            Product = product;
+            ProductId = product.ProductId;
+            StockChanged = qty;
+            ChangeType = changeType;
+            Note = note;
+        }
     }
 }
