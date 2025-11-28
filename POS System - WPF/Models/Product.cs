@@ -10,7 +10,7 @@ namespace POS_System___WPF.Models
 {
     public class Product
     {
-        public int ProductID { get; set; }
+        public int ProductId { get; set; }
 
         public string ProductName { get; set; }
 
@@ -21,11 +21,11 @@ namespace POS_System___WPF.Models
         public int Quantity { get; set; }
 
 
-        public int SupplierID { get; set; }
+        public int SupplierId { get; set; }
 
         public Supplier Supplier { get; set; }
 
-        public List<SaleItem> Sales { get; set; }
+        public List<InvoiceItem> Sales { get; set; }
         public List<InventoryLog> InventoryLogs { get; set; }
     }
 }

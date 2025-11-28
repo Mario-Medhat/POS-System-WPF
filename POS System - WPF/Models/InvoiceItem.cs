@@ -8,24 +8,22 @@ using System.Threading.Tasks;
 
 namespace POS_System___WPF.Models
 {
-    public class SaleItem
+    public class InvoiceItem
     {
-        public int SaleItemID { get; set; }
-        public int ProductID { get; set; }
+        public int InvoiceItemId { get; set; }
+       
+        public int InvoiceId { get; set; } // Foreign Key
+        public Invoice Invoice { get; set; }
+        
+        public int ProductId { get; set; } // Foreign Key
         public Product Product { get; set; }
-        public int CustomerID { get; set; }
-        public Customer Customer { get; set; }
 
         public int Quantity { get; set; }
+        
         public decimal PriceAtSaleTime { get; set; }
-        public DateTime Date { get; set; }
 
         [NotMapped]
         public decimal TotalAmount => Quantity * PriceAtSaleTime;
 
-
-        public string PaymentStatus { get; set; }
-
-        public List<Payment> Payments { get; set; }
     }
 }
