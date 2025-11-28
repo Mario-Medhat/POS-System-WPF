@@ -29,5 +29,11 @@ namespace POS_System___WPF.Data
             Draft,
         }
 
+        public enum StockChangeType
+        {
+            SaleItem,
+            Purchase,
+            Manual,
+        }
     }
 }

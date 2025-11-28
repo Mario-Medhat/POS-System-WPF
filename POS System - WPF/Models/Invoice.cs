@@ -52,7 +52,7 @@ namespace POS_System___WPF.Models
         public Invoice(Customer customer = null)
         {
             Customer = customer;
-            CustomerId = customer?.CustomerID;
+            CustomerId = customer?.CustomerId;
         }
 
 

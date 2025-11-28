@@ -9,7 +9,7 @@ namespace POS_System___WPF.Models
 {
     public class Customer
     {
-        public int CustomerID { get; private set; }
+        public int CustomerId { get; private set; }
         public string Name { get; private set; }
         public string? Phone { get; private set; }
         public string? Email { get; private set; }

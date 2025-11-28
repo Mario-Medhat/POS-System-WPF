@@ -5,15 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static POS_System___WPF.Data.Enums;
 
 namespace POS_System___WPF.Models
 {
-    public enum ChangeType
-    {
-        SaleItem,
-        Purchase,
-        Manual,
-    }
 
     public class InventoryLog
     {
@@ -24,13 +19,13 @@ namespace POS_System___WPF.Models
 
         public decimal StockChanged { get; set; } // +5, -3 ..etc
 
-        public ChangeType ChangeType { get; set; }
+        public StockChangeType ChangeType { get; set; }
 
         public DateTime LogDate { get; set; } = DateTime.Now;
         public string Note { get; private set; }
 
         private InventoryLog() { }
-        public InventoryLog(Product product, decimal qty, ChangeType changeType, string note = "")
+        public InventoryLog(Product product, decimal qty, StockChangeType changeType, string note = "")
         {
             Product = product;
             ProductId = product.ProductId;
