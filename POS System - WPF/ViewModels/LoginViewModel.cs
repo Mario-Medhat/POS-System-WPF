@@ -1,6 +1,6 @@
 ﻿using POS_System___WPF.Commands;
 using POS_System___WPF.Models;
-using POS_System___WPF.Repositories.Interfaces;
+using POS_System___WPF.Interfaces;
 using POS_System___WPF.Services;
 using POS_System___WPF.Views;
 using System;

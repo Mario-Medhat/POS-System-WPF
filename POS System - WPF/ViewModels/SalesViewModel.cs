@@ -32,7 +32,7 @@ namespace POS_System___WPF.ViewModels
         /// <summary>
         /// The shopping cart items. Updated every time a user adds/removes a product.
         /// </summary>
-        public ObservableCollection<SaleItem> Cart { get; }
+        public ObservableCollection<InvoiceItem> Cart { get; }
 
         /// <summary>
         /// Product currently selected in the UI.
@@ -62,7 +62,7 @@ namespace POS_System___WPF.ViewModels
             _productRepository = productRepository;
 
             Products = new ObservableCollection<Product>();
-            Cart = new ObservableCollection<SaleItem>();
+            Cart = new ObservableCollection<InvoiceItem>();
 
             // Commands
             AddToCartCommand = new RelayCommand(AddToCart, CanAddToCart);
@@ -95,7 +95,7 @@ namespace POS_System___WPF.ViewModels
         /// </summary>
         private void AddToCart()
         {
-            var item = new SaleItem
+            var item = new InvoiceItem
             {
                 Product = SelectedProduct,
                 PriceAtSaleTime = SelectedProduct.Price,
