@@ -10,7 +10,7 @@ using POS_System___WPF.Interfaces;
 
 namespace POS_System___WPF.Repositories
 {
-    internal class CustomerRepository : Repository<Customer>, ICustomerRepository
+    internal class CustomerRepository : RepositoryBase<Customer>, ICustomerRepository
     {
         private readonly AppDbContext _context;
 

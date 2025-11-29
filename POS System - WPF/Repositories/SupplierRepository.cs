@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace POS_System___WPF.Repositories
 {
-    public class SupplierRepository : Repository<Supplier>, ISupplierRepository
+    public class SupplierRepository : RepositoryBase<Supplier>, ISupplierRepository
     {
         private readonly AppDbContext _context;
 

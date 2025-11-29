@@ -19,7 +19,7 @@ namespace POS_System___WPF.ViewModels
     public class SalesViewModel : INotifyPropertyChanged
     {
         private readonly IProductRepository _productRepository;
-
+        private readonly SaleInvoice _saleInvoice = new SaleInvoice();
         private Product _selectedProduct;
         private int _quantity = 1;
 
@@ -77,7 +77,7 @@ namespace POS_System___WPF.ViewModels
         /// </summary>
         public async Task InitializeAsync()
         {
-            var products = await _productRepository.GetAllAsync();
+            var products = await _productRepository.ListAsync();
 
             Products.Clear();
             foreach (var product in products)
@@ -95,11 +95,11 @@ namespace POS_System___WPF.ViewModels
         /// </summary>
         private void AddToCart()
         {
-            var item = new InvoiceItem
+            var item = new InvoiceItem(invoice: _saleInvoice, product: SelectedProduct, price: SelectedProduct.Price, qty: Quantity)
             {
                 Product = SelectedProduct,
                 PriceAtSaleTime = SelectedProduct.Price,
-                Quantity = Quantity
+                Quantity = SelectedProduct.Stock,
             };
             Console.Write(item.TotalAmount);
             Cart.Add(item);

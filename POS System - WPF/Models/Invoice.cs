@@ -72,7 +72,7 @@ namespace POS_System___WPF.Models
 
             if (existingItem == null)
             {
-                InvoiceItems.Add(new InvoiceItem(invoice: this, productId: product.ProductId, price: priceAtSale, quantity));
+                InvoiceItems.Add(new InvoiceItem(invoice: this, product: product, price: priceAtSale, quantity));
             }
             else
             {

@@ -17,12 +17,12 @@ namespace POS_System___WPF.Services
             _repo = repo;
         }
 
-        public Task<List<User>> GetAllUsers() => _repo.GetAllAsync();
+        public Task<IReadOnlyList<User>> GetAllUsers() => _repo.ListAsync();
 
-        public Task AddUser(User p) => _repo.AddAsync(p);
+        public Task AddUser(User u) => _repo.AddAsync(u);
 
-        public Task DeleteUser(int id) => _repo.DeleteAsync(id);
+        public Task DeleteUser(User u) => _repo.DeleteAsync(u);
 
-        public Task UpdateUser(User p) => _repo.UpdateAsync(p);
+        public Task UpdateUser(User u) => _repo.UpdateAsync(u);
     }
 }

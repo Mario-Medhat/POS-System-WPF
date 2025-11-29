@@ -14,8 +14,13 @@ namespace POS_System___WPF.Models
         public int ProductId { get; private set; }
 
         public string ProductName { get; private set; }
+        public string Barcode { get; set; } = null!;
+        public string Description { get; set; } = null!;
         public decimal Price { get; private set; }
+        // ✅ Using decimal for stock to support fractional quantities
         public decimal Stock { get; private set; }
+        // ✅ Soft delete / Enable disable
+        public bool IsActive { get; set; } = true;
 
         public int CategoryId { get; private set; }
         public ProductCategory Category { get; private set; }
